@@ -11,6 +11,8 @@ public class Main {
     public static final String INSERTPP = "SELECT * FROM city where name LIKE 'Poprad' ";
     public static final String CITYINFO = "SELECT city.Name, country.Name as Country, json_extract(info,'$.Population')as Population FROM country " +
             "INNER JOIN city ON country.code= city.countryCode WHERE city.Name LIKE ?";
+    public static final String CITYTOP20 = "SELECT city.Name, country.Name as Country, json_extract(info,'$.Population')as Population FROM country " +
+            "INNER JOIN city ON country.code= city.countryCode Order BY Population DESC LIMIT 20 ";
 
     public static void main(String[] args) {
         try {
@@ -80,12 +82,27 @@ public class Main {
 //
 
             statement = connection.prepareStatement(CITYINFO);
-            statement.setString(1, "London");
+            statement.setString(1, "Utrecht");
             resultSet = statement.executeQuery();
-            System.out.println("List of city info: ");
+            System.out.println("City info: ");
             if (resultSet.next()) {
 
-                System.out.print(resultSet.getString("Name") + " " + resultSet.getString("Country") + " " + resultSet.getInt(3));
+                System.out.print(resultSet.getString("Name") + "  " + resultSet.getString("Country") + "  " + resultSet.getInt(3));
+            } else {
+                System.out.println("City not in database");
+            }
+
+            System.out.println();
+            System.out.println();
+
+            statement = connection.prepareStatement(CITYTOP20);
+            resultSet = statement.executeQuery();
+            int count = 1;
+            System.out.println("Top 20 by population:");
+            while (resultSet.next()) {
+
+                System.out.print(count + ".  " + resultSet.getString("Name") + "  " + resultSet.getString("Country") + "  " + resultSet.getInt(3) + "\n");
+                count++;
             }
 
 
