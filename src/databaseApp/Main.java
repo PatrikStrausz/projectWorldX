@@ -31,7 +31,8 @@ selectOption();
         System.out.println("2 - Insert city into slovak cities");
         System.out.println("3 - Update Slovak City");
         System.out.println("4 - Delete Slovak City");
-        System.out.println("5 - Exit Application");
+        System.out.println("5 - Population by country");
+        System.out.println("6 - Exit Application");
         System.out.println("Enter option: ");
        option = scanner.nextLine();
     }
@@ -59,8 +60,13 @@ try {
              database.deleteSlovakCity();
              break;
          case "5":
+            database.showPopulationOfCountry();
+            break;
+
+         case "6":
              System.out.println("Exiting...");
              return;
+
 
          default:
              System.out.println("Wrong input");

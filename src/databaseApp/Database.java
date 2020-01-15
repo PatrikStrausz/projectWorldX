@@ -116,7 +116,7 @@ public class Database implements DatabaseMethods {
         check.setString(1, city);
         ResultSet resultSet = check.executeQuery();
         if (resultSet.next()) {
-            System.out.println(city + " is already in database");
+            System.out.println(city + " is already in database.");
         } else {
 
 
@@ -127,7 +127,7 @@ public class Database implements DatabaseMethods {
             statement.setString(3, district);
             statement.setString(4, "{\"Population\": " + population + "}");
             statement.execute();
-            System.out.println(city + " successfully added");
+            System.out.println(city + " successfully added.");
 
         }
 
@@ -156,5 +156,26 @@ public class Database implements DatabaseMethods {
         System.out.println();
 
 
+    }
+
+
+    public void showPopulationOfCountry() throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter name of Country to show population: ");
+        String name = sc.nextLine();
+
+
+        PreparedStatement statement = getConnection().prepareStatement("SELECT json_extract(doc, '$.Name'),json_extract(doc, '$.demographics.Population') FROM countryinfo WHERE json_extract(doc, '$.Name') like ?");
+        statement.setString(1, "\"" + name + "\"");
+
+        ResultSet rs = statement.executeQuery();
+        System.out.println("\nPopulation of this country: ");
+        if (rs.next()) {
+            System.out.println(rs.getString(1) + "     "
+                    + rs.getString(2) + "     ");
+        }else {
+            System.out.println(name + " is not in database");
+            connection.close();
+        }
     }
 }
